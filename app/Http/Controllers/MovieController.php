@@ -9,9 +9,18 @@ use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use App\Http\Requests\StoreMovieRequest;
+use App\Http\Requests\AddBroadcastRequest;
+
 
 class MovieController extends Controller
 {
+    /**
+     * Retrieve a paginated list of movies with optional search.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function index(Request $request): JsonResponse
     {
         try {
@@ -28,7 +37,13 @@ class MovieController extends Controller
         }
     }
 
-    public function show($id): JsonResponse
+    /**
+     * Retrieve a specific movie by ID with its associated broadcasts.
+     *
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function show(int $id): JsonResponse
     {
         try {
             $movie = Movie::with(['broadcasts' => function ($query) {
@@ -44,16 +59,16 @@ class MovieController extends Controller
         }
     }
 
-    public function store(Request $request): JsonResponse
+    /**
+     * Create a new movie.
+     *
+     * @param StoreMovieRequest $request
+     * @return JsonResponse
+     */
+    public function store(StoreMovieRequest $request): JsonResponse
     {
         try {
-            $validatedData = $request->validate([
-                'title' => 'required|max:100',
-                'rating' => 'required|numeric',
-                'age_restriction' => 'nullable|max:2',
-                'description' => 'required|max:500',
-                'premieres_at' => 'required|date',
-            ]);
+            $validatedData = $request->validated();
 
             $movie = Movie::create($validatedData);
 
@@ -64,13 +79,17 @@ class MovieController extends Controller
         }
     }
 
-    public function addBroadcast(Request $request, $movieId): JsonResponse
+    /**
+     * Add a new broadcast to a movie.
+     *
+     * @param AddBroadcastRequest $request
+     * @param int $movieId
+     * @return JsonResponse
+     */
+    public function addBroadcast(AddBroadcastRequest $request, int $movieId): JsonResponse
     {
         try {
-            $validatedData = $request->validate([
-                'channel_nr' => 'required|integer',
-                'broadcasts_at' => 'required|date',
-            ]);
+            $validatedData = $request->validated();
 
             $movie = Movie::findOrFail($movieId);
 
@@ -86,7 +105,13 @@ class MovieController extends Controller
         }
     }
 
-    public function destroy($id): JsonResponse
+    /**
+     * Delete a movie.by its ID.
+     *
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function destroy(int $id): JsonResponse
     {
         try {
             $movie = Movie::findOrFail($id);
