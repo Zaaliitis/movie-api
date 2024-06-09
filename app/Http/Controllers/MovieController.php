@@ -24,13 +24,20 @@ class MovieController extends Controller
     public function index(Request $request): JsonResponse
     {
         try {
-            $searchTerm = $request->query('search');
+            $searchTerm = $request->query('search') ?? '';
 
-            $movies = Movie::when($searchTerm, function ($query, $searchTerm) {
-                return $query->where('title', 'like', "%{$searchTerm}%");
-            })->paginate(10);
+            if (is_string($searchTerm)) {
+                $searchTerm = trim($searchTerm);
+                $movies = Movie::when($searchTerm, function ($query, $searchTerm) {
+                    return $query->where('title', 'like', "%$searchTerm%");
+                })->paginate(10);
+                return response()->json($movies);
 
-            return response()->json($movies);
+            } else {
+                Log::warning('Unexpected array value for search term');
+                return response()->json(['error' => 'Unexpected array value for search term'], 500);
+            }
+
         } catch (Exception $e) {
             Log::error('Error fetching movies: ' . $e->getMessage());
             return response()->json(['error' => 'An error occurred while fetching the movies'], 500);
