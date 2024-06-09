@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class MovieBroadcast extends Model
 {
@@ -12,7 +13,10 @@ class MovieBroadcast extends Model
         'broadcasts_at',
     ];
 
-    public function movie()
+    /**
+     * Get the movie that the broadcast belongs to.
+     */
+    public function movie(): BelongsTo
     {
         return $this->belongsTo(Movie::class);
     }
