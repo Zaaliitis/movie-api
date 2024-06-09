@@ -17,6 +17,8 @@ class Movie extends Model
 
     /**
      * Get the broadcasts for the movie.
+     *
+     * @return HasMany<MovieBroadcast>
      */
     public function broadcasts(): HasMany
     {

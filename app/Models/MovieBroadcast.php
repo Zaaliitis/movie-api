@@ -15,6 +15,8 @@ class MovieBroadcast extends Model
 
     /**
      * Get the movie that the broadcast belongs to.
+     *
+     * @return BelongsTo<Movie, MovieBroadcast>
      */
     public function movie(): BelongsTo
     {
