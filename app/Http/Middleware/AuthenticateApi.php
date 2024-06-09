@@ -10,16 +10,17 @@ class AuthenticateApi
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if (!$request->hasHeader('Authorization')) {
-            return $this->unauthorized();
-        }
-
         $authorizationHeader = $request->header('Authorization');
-        if (!$this->isValidAuthorizationHeader($authorizationHeader)) {
+
+        if ($authorizationHeader === null) {
             return $this->unauthorized();
         }
 
-        list($username, $password) = $this->extractCredentials($authorizationHeader);
+        if (!$this->isValidAuthorizationHeader((string)$authorizationHeader)) {
+            return $this->unauthorized();
+        }
+
+        list($username, $password) = $this->extractCredentials((string)$authorizationHeader);
 
         if (!$this->isValidCredentials($username, $password)) {
             return $this->unauthorized();
@@ -28,25 +29,33 @@ class AuthenticateApi
         return $next($request);
     }
 
-    private function isValidAuthorizationHeader($authorizationHeader): bool
+    private function isValidAuthorizationHeader(string $authorizationHeader): bool
     {
-        return preg_match('/^Basic\s+[a-zA-Z0-9+\/=]+$/', $authorizationHeader) === 1;
+        return preg_match('/^Basic\s+[a-zA-Z0-9+\/=]+$/', $authorizationHeader) == 1;
     }
-
-    private function extractCredentials($authorizationHeader): array
+    /**
+     * @return array{0: string|null, 1: string|null}
+     */
+    private function extractCredentials(string $authorizationHeader): array
     {
         $encodedCredentials = substr($authorizationHeader, 6);
         $decodedCredentials = base64_decode($encodedCredentials);
-        if ($decodedCredentials === false || !strpos($decodedCredentials, ':')) {
+
+        if (!$decodedCredentials || !str_contains($decodedCredentials, ':')) {
             return [null, null];
         }
-        return explode(':', $decodedCredentials, 2);
+
+        return [
+            '0' => explode(':', $decodedCredentials, 2)[0],
+            '1' => explode(':', $decodedCredentials, 2)[1]
+        ];
     }
 
-    private function isValidCredentials($username, $password): bool
+    private function isValidCredentials(?string $username, ?string $password): bool
     {
         $validUsername = env('API_USERNAME');
         $validPassword = env('API_PASSWORD');
+
         return $username === $validUsername && $password === $validPassword;
     }
 
@@ -57,3 +66,4 @@ class AuthenticateApi
         ]);
     }
 }
+
