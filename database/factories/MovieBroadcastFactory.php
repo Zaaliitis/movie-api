@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Movie;
 use App\Models\MovieBroadcast;
 use Illuminate\Database\Eloquent\Factories\Factory;
+
 /**
  * @extends Factory<MovieBroadcast>
  */

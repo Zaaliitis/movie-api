@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AddBroadcastRequest;
+use App\Http\Requests\StoreMovieRequest;
 use App\Models\Movie;
 use App\Models\MovieBroadcast;
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Exception;
 use Illuminate\Support\Facades\Log;
-use App\Http\Requests\StoreMovieRequest;
-use App\Http\Requests\AddBroadcastRequest;
-
 
 class MovieController extends Controller
 {

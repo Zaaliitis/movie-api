@@ -4,8 +4,8 @@ namespace Tests\Unit;
 
 use App\Models\Movie;
 use App\Models\MovieBroadcast;
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class MovieBroadcastTest extends TestCase
 {
