@@ -113,7 +113,7 @@ class MovieController extends Controller
     }
 
     /**
-     * Delete a movie.by its ID.
+     * Delete a movie by its ID.
      *
      * @param int $id
      * @return JsonResponse
