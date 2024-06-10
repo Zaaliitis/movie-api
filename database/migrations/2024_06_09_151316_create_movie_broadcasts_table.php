@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateMovieBroadcastsTable extends Migration
 {
-    public function up()
+    public function up(): void
     {
         Schema::create('movie_broadcasts', function (Blueprint $table) {
             $table->id();
@@ -19,7 +19,7 @@ class CreateMovieBroadcastsTable extends Migration
         });
     }
 
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('movie_broadcasts');
     }
