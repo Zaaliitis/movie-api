@@ -82,7 +82,7 @@ API_PASSWORD=your-api-password
 Replace `your-api-username` and `your-api-password` with your desired credentials.
 
 ## API Endpoints
-
+Use the Postman collection `Movies.postman_collection.json` or endpoints provided below to interact with the API.
 - `GET /api/movies`: Retrieve a paginated list of movies.
 - `GET /api/movies/{id}`: Retrieve a specific movie by ID.
 - `POST /api/movies`: Create a new movie.
